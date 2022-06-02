@@ -42,7 +42,7 @@ public class DataSaveLoader : MonoBehaviour
             {
                 Debug.Log("Good sleep");
                 winstreak++;
-                playerMoney.AdjustMoney(winstreak);
+                playerMoney.AdjustMoney(Mathf.Min(winstreak, 7));
             }
         }
         else
