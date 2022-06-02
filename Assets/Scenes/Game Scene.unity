@@ -1090,9 +1090,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMoney: {fileID: 1266818169}
-  oneCost: {fileID: 1694035246}
-  threeCost: {fileID: 1250269983}
-  sevenCost: {fileID: 861818740}
+  oneCost: {fileID: 1456204499}
+  threeCost: {fileID: 1460864863}
+  sevenCost: {fileID: 152549001}
 --- !u!1 &711120605
 GameObject:
   m_ObjectHideFlags: 0
