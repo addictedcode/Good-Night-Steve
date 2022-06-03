@@ -1,9 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Steve : MonoBehaviour
 {
+    private DateTime wakeUpTime;
+    private bool isStressed = false;
+
+    private void Update()
+    {
+        DateTime currentTime = DateTime.Now;
+        TimeSpan awakeTime = currentTime.Subtract(wakeUpTime);
+
+        float playerAge = PlayerPrefs.GetInt("Age");
+
+        if (playerAge < 20)
+        {
+            if (awakeTime.TotalHours >= 20)
+            {
+                Debug.Log("Steve is lacking sleep");
+                setStressed(true);
+            }
+        }
+    }
+
+    public void WakeSteve(DateTime wakeUp)
+    {
+        wakeUpTime = wakeUp;
+    }
+
+    public void setStressed(bool stressed)
+    {
+        isStressed = stressed;
+    }
+
     public void Feed(int foodType)
     {
         float wideIncrease = 0;

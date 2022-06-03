@@ -9,6 +9,8 @@ using System;
 public class GameData
 {
     public DateTime sleepTime;
+    public DateTime previousWakeTime;
+    public bool isAsleep;
     public int winStreak;
     public int money;
     public float xSize;
@@ -17,38 +19,50 @@ public class GameData
 
 public class DataSaveLoader : MonoBehaviour
 {
-    private DateTime currentTime;
-    private TimeSpan span;
+    private DateTime wakeUpTime;
+    private TimeSpan sleepSpan;
 
     private DateTime sleepTime;
+    private bool fellAsleep = false;
     private int winstreak = 0;
     public PlayerMoney playerMoney;
     public GameObject Steve;
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         LoadSleepTime();
 
-        float playerAge = PlayerPrefs.GetInt("Age");
-        span = currentTime.Subtract(sleepTime);
-        if (playerAge < 20)
+        if (fellAsleep)
         {
-            if (span.TotalHours < 8 || span.TotalHours > 10)
+            wakeUpTime = DateTime.Now;
+            float playerAge = PlayerPrefs.GetInt("Age");
+            sleepSpan = wakeUpTime.Subtract(sleepTime);
+            if (playerAge < 20)
             {
-                Debug.Log("Poor sleep");
-                winstreak = 0;
+                if (sleepSpan.TotalHours < 8 || sleepSpan.TotalHours > 10)
+                {
+                    Debug.Log("Poor sleep");
+                    winstreak = 0;
+                    Steve.GetComponent<Steve>().setStressed(true);
+                }
+                else
+                {
+                    Debug.Log("Good sleep");
+                    winstreak++;
+                    playerMoney.AdjustMoney(Mathf.Min(winstreak, 7));
+                    Steve.GetComponent<Steve>().setStressed(false);
+                }
             }
             else
             {
-                Debug.Log("Good sleep");
-                winstreak++;
-                playerMoney.AdjustMoney(Mathf.Min(winstreak, 7));
+                Debug.Log("Dunno don't care");
             }
         }
         else
         {
-            Debug.Log("Dunno don't care");
+            Debug.Log("Steve couldn't fall asleep");
         }
+        Steve.GetComponent<Steve>().WakeSteve(wakeUpTime);
     }
 
     public void SaveSleepTime()
@@ -58,6 +72,12 @@ public class DataSaveLoader : MonoBehaviour
 
         GameData data = new GameData();
         data.sleepTime = DateTime.Now;
+        data.previousWakeTime = wakeUpTime;
+        //don't sleep if awake for less than 8 hrs and didn't lack sleep
+        if (DateTime.Now.Subtract(wakeUpTime).TotalHours <= 8 && sleepSpan.TotalHours >= 7)
+            data.isAsleep = false;
+        else
+            data.isAsleep = true;
         data.winStreak = winstreak;
         data.money = playerMoney.GetMoney();
         data.xSize = Steve.transform.localScale.x;
@@ -76,8 +96,12 @@ public class DataSaveLoader : MonoBehaviour
             FileStream file = new FileStream(Application.persistentDataPath + "/Steve.dat", FileMode.Open);
 
             GameData data = formatter.Deserialize(file) as GameData;
-            //time
+            //sleep time
             sleepTime = data.sleepTime;
+            //past wake up time in case didn't fall asleep
+            wakeUpTime = data.previousWakeTime;
+            //fell asleep, doesn't sleep if goodnight happens before spending 8 hrs awake
+            fellAsleep = data.isAsleep;
             //streak
             winstreak = data.winStreak;
             //money
