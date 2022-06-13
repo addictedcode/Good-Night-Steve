@@ -1,0 +1,16 @@
+{
+    "name": "Internal",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2b73ba24fc302f44a9592b8a64762bcb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
