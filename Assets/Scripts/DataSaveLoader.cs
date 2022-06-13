@@ -86,6 +86,8 @@ public class DataSaveLoader : MonoBehaviour
         formatter.Serialize(file, data);
 
         file.Close();
+
+        Steve.GetComponent<Steve>().SleepSteve();
     }
 
     public void LoadSleepTime()

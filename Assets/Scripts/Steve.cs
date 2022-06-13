@@ -1,10 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class Steve : MonoBehaviour
 {
+    [SerializeField] private Image m_SteveImage;
+
+    [SerializeField] private Sprite m_SteveNeutral;
+    [SerializeField] private Sprite m_SteveHappy;
+    [SerializeField] private Sprite m_SteveSleeping;
+    [SerializeField] private Sprite m_SteveAngry;
+
     private DateTime wakeUpTime;
     private bool isStressed = false;
 
@@ -28,6 +36,20 @@ public class Steve : MonoBehaviour
     public void WakeSteve(DateTime wakeUp)
     {
         wakeUpTime = wakeUp;
+
+        if (isStressed)
+        {
+            m_SteveImage.sprite = m_SteveAngry;
+        }
+        else
+        {
+            m_SteveImage.sprite = m_SteveNeutral;
+        }
+    }
+
+    public void SleepSteve()
+    {
+        m_SteveImage.sprite = m_SteveSleeping;
     }
 
     public void setStressed(bool stressed)
@@ -60,7 +82,10 @@ public class Steve : MonoBehaviour
     
     public void Play()
     {
-
+        if (!isStressed)
+        {
+            m_SteveImage.sprite = m_SteveHappy;
+        }
     }
     
     public void Drink(int drinkType)
