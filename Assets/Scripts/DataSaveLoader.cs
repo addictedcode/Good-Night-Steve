@@ -40,25 +40,19 @@ public class DataSaveLoader : MonoBehaviour
             float playerAge = PlayerPrefs.GetInt("Age");
             sleepSpan = wakeUpTime.Subtract(sleepTime);
             m_notificationManager.SendNotification("Steve", "Time to say goodnight to Steve!", 24 - (int)sleepSpan.TotalHours);
-            if (playerAge < 20)
+
+            if (sleepSpan.TotalHours < PlayerPrefs.GetInt("MinSleep") || sleepSpan.TotalHours > PlayerPrefs.GetInt("MaxSleep"))
             {
-                if (sleepSpan.TotalHours < 8 || sleepSpan.TotalHours > 10)
-                {
-                    Debug.Log("Poor sleep");
-                    winstreak = 0;
-                    Steve.GetComponent<Steve>().setStressed(true);
-                }
-                else
-                {
-                    Debug.Log("Good sleep");
-                    winstreak++;
-                    playerMoney.AdjustMoney(Mathf.Min(winstreak, 7));
-                    Steve.GetComponent<Steve>().setStressed(false);
-                }
+                Debug.Log("Poor sleep");
+                winstreak = 0;
+                Steve.GetComponent<Steve>().setStressed(true);
             }
             else
             {
-                Debug.Log("Dunno don't care");
+                Debug.Log("Good sleep");
+                winstreak++;
+                playerMoney.AdjustMoney(Mathf.Min(winstreak, 7));
+                Steve.GetComponent<Steve>().setStressed(false);
             }
         }
         else
