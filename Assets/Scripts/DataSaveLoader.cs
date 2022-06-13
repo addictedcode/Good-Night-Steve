@@ -28,6 +28,8 @@ public class DataSaveLoader : MonoBehaviour
     public PlayerMoney playerMoney;
     public GameObject Steve;
 
+    [SerializeField] private NotificationManager m_notificationManager;
+
     void Awake()
     {
         LoadSleepTime();
@@ -88,6 +90,7 @@ public class DataSaveLoader : MonoBehaviour
         file.Close();
 
         Steve.GetComponent<Steve>().SleepSteve();
+        m_notificationManager.SendNotification("Steve", "Time to wake up!", PlayerPrefs.GetInt("SleepTime"));
     }
 
     public void LoadSleepTime()
