@@ -39,6 +39,7 @@ public class DataSaveLoader : MonoBehaviour
             wakeUpTime = DateTime.Now;
             float playerAge = PlayerPrefs.GetInt("Age");
             sleepSpan = wakeUpTime.Subtract(sleepTime);
+            m_notificationManager.SendNotification("Steve", "Time to say goodnight to Steve!", 24 - (int)sleepSpan.TotalHours);
             if (playerAge < 20)
             {
                 if (sleepSpan.TotalHours < 8 || sleepSpan.TotalHours > 10)
@@ -90,7 +91,7 @@ public class DataSaveLoader : MonoBehaviour
         file.Close();
 
         Steve.GetComponent<Steve>().SleepSteve();
-        m_notificationManager.SendNotification("Steve", "Time to wake up!", PlayerPrefs.GetInt("SleepTime"));
+        m_notificationManager.SendNotification("Steve", "Time to say goodmorning to Steve!", PlayerPrefs.GetInt("SleepTime"));
     }
 
     public void LoadSleepTime()
