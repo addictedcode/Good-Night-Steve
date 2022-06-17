@@ -8,12 +8,12 @@ public class PlayerSettings : MonoBehaviour
 
     [SerializeField] private TMP_Text m_SleepTime;
     [SerializeField] private Slider m_SleepTimeSlider;
-    [SerializeField] private GameObject m_SettingsPanel;
+    [SerializeField] private GameObject m_TutorialPanel;
 
     private void Awake()
     {
         if (!PlayerPrefs.HasKey("Age")) {
-            m_SettingsPanel.SetActive(true);
+            m_TutorialPanel.SetActive(true);
         }
         else {
             SetSleepTimeSliderMinMax(PlayerPrefs.GetInt("Age"));
