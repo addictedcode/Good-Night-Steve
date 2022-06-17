@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game Scene.unity
     guid: 849e2500314171645bf81340c33f0e86
+  - enabled: 1
+    path: Assets/Scenes/MusicPlayer.unity
+    guid: c785ef3a381d5a048888a1c34191d5a9
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: c3f71293e3346fb42a3bc3ae3d5e8b80, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 8d60af54b4f154d45b8fc1a6c99f956b, type: 2}
