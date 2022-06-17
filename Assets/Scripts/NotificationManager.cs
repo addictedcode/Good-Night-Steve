@@ -37,6 +37,8 @@ public class NotificationManager : MonoBehaviour
         var notification = new AndroidNotification();
         notification.Title = title;
         notification.Text = text;
+        notification.SmallIcon = "small_icon";
+        notification.LargeIcon = "large_icon";
         notification.FireTime = System.DateTime.Now.AddHours(hours);
 
         AndroidNotificationCenter.SendNotification(notification, "default");
