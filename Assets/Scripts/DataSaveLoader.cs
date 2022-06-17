@@ -29,37 +29,61 @@ public class DataSaveLoader : MonoBehaviour
     public GameObject Steve;
 
     [SerializeField] private NotificationManager m_notificationManager;
+    [SerializeField] private GameObject m_GoodnightButton;
+    [SerializeField] private GameObject m_WakeupButton;
 
-    void Awake()
-    {
+    private void Awake() {
         LoadSleepTime();
+        if (fellAsleep) {
+            Steve.GetComponent<Steve>().SleepSteve();
+            m_GoodnightButton.SetActive(false);
+            m_WakeupButton.SetActive(true);
+        }
+    }
 
-        if (fellAsleep)
-        {
+    public void WakeUpSteve() {
+        if (fellAsleep) {
             wakeUpTime = DateTime.Now;
             float playerAge = PlayerPrefs.GetInt("Age");
             sleepSpan = wakeUpTime.Subtract(sleepTime);
             m_notificationManager.SendNotification("Steve", "Time to say goodnight to Steve!", 24 - (int)sleepSpan.TotalHours);
 
-            if (sleepSpan.TotalHours < PlayerPrefs.GetInt("MinSleep") || sleepSpan.TotalHours > PlayerPrefs.GetInt("MaxSleep"))
-            {
+            if (sleepSpan.TotalHours < PlayerPrefs.GetInt("MinSleep") || sleepSpan.TotalHours > PlayerPrefs.GetInt("MaxSleep")) {
                 Debug.Log("Poor sleep");
                 winstreak = 0;
                 Steve.GetComponent<Steve>().setStressed(true);
             }
-            else
-            {
+            else {
                 Debug.Log("Good sleep");
                 winstreak++;
                 playerMoney.AdjustMoney(Mathf.Min(winstreak, 7));
                 Steve.GetComponent<Steve>().setStressed(false);
             }
         }
-        else
-        {
+        else {
             Debug.Log("Steve couldn't fall asleep");
         }
         Steve.GetComponent<Steve>().WakeSteve(wakeUpTime);
+        Save();
+    }
+
+    public void Save() {
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream file = new FileStream(Application.persistentDataPath + "/Steve.dat", FileMode.Create);
+
+        GameData data = new GameData();
+        data.sleepTime = DateTime.Now;
+        data.previousWakeTime = wakeUpTime;
+        //don't sleep if awake for less than 8 hrs and didn't lack sleep
+        data.isAsleep = false;
+        data.winStreak = winstreak;
+        data.money = playerMoney.GetMoney();
+        data.xSize = Steve.transform.localScale.x;
+        data.ySize = Steve.transform.localScale.y;
+
+        formatter.Serialize(file, data);
+
+        file.Close();
     }
 
     public void SaveSleepTime()
