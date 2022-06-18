@@ -14,24 +14,7 @@ public class Steve : MonoBehaviour
     [SerializeField] private Sprite m_SteveAngry;
 
     private DateTime wakeUpTime;
-    private bool isStressed = false;
-
-    private void Update()
-    {
-        DateTime currentTime = DateTime.Now;
-        TimeSpan awakeTime = currentTime.Subtract(wakeUpTime);
-
-        float playerAge = PlayerPrefs.GetInt("Age");
-
-        if (playerAge < 20)
-        {
-            if (awakeTime.TotalHours >= 20)
-            {
-                Debug.Log("Steve is lacking sleep");
-                setStressed(true);
-            }
-        }
-    }
+    public bool isStressed = false;
 
     public void WakeSteve(DateTime wakeUp)
     {
@@ -55,6 +38,14 @@ public class Steve : MonoBehaviour
     public void setStressed(bool stressed)
     {
         isStressed = stressed;
+        if (isStressed)
+        {
+            m_SteveImage.sprite = m_SteveAngry;
+        }
+        else
+        {
+            m_SteveImage.sprite = m_SteveNeutral;
+        }
     }
 
     public void Feed(int foodType)

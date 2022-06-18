@@ -11,6 +11,7 @@ public class GameData
     public DateTime sleepTime;
     public DateTime previousWakeTime;
     public bool isAsleep;
+    public bool isStressed;
     public int winStreak;
     public int money;
     public float xSize;
@@ -67,6 +68,31 @@ public class DataSaveLoader : MonoBehaviour
         Save();
     }
 
+    public void WakeUpSteveForceGood()
+    {
+        if (fellAsleep)
+        {
+            Debug.Log("Good sleep");
+            winstreak++;
+            playerMoney.AdjustMoney(Mathf.Min(winstreak, 7));
+            Steve.GetComponent<Steve>().setStressed(false);
+        }
+        Steve.GetComponent<Steve>().WakeSteve(wakeUpTime);
+        Save();
+    }
+
+    public void WakeUpSteveForceBad()
+    {
+        if (fellAsleep)
+        {
+            Debug.Log("Poor sleep");
+            winstreak = 0;
+            Steve.GetComponent<Steve>().setStressed(true);
+        }
+        Steve.GetComponent<Steve>().WakeSteve(wakeUpTime);
+        Save();
+    }
+
     public void Save() {
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = new FileStream(Application.persistentDataPath + "/Steve.dat", FileMode.Create);
@@ -88,6 +114,8 @@ public class DataSaveLoader : MonoBehaviour
 
     public void SaveSleepTime()
     {
+        fellAsleep = true;
+
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = new FileStream(Application.persistentDataPath + "/Steve.dat", FileMode.Create);
 
@@ -103,13 +131,14 @@ public class DataSaveLoader : MonoBehaviour
         data.money = playerMoney.GetMoney();
         data.xSize = Steve.transform.localScale.x;
         data.ySize = Steve.transform.localScale.y;
+        data.isStressed = Steve.GetComponent<Steve>().isStressed;
 
         formatter.Serialize(file, data);
 
         file.Close();
 
         Steve.GetComponent<Steve>().SleepSteve();
-        m_notificationManager.SendNotification("Steve", "Time to say goodmorning to Steve!", PlayerPrefs.GetInt("SleepTime"));
+        //m_notificationManager.SendNotification("Steve", "Time to say goodmorning to Steve!", PlayerPrefs.GetInt("SleepTime"));
     }
 
     public void LoadSleepTime()
@@ -132,6 +161,7 @@ public class DataSaveLoader : MonoBehaviour
             playerMoney.SetMoney(data.money);
             //size
             Steve.transform.localScale = new Vector3(data.xSize, data.ySize, 1);
+            Steve.GetComponent<Steve>().setStressed(data.isStressed);
 
             file.Close();
 
