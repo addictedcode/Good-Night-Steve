@@ -17,6 +17,8 @@ public class PlayerSettings : MonoBehaviour
         }
         else {
             SetSleepTimeSliderMinMax(PlayerPrefs.GetInt("Age"));
+            m_SleepTimeSlider.value = PlayerPrefs.GetInt("SleepTime");
+            m_SleepTime.text = PlayerPrefs.GetInt("SleepTime").ToString();
         }
     }
 
